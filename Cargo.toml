@@ -1,0 +1,12 @@
+[package]
+
+	name = "jp-term"
+	version = "0.1.0"
+	edition = "2021"
+
+[dependencies]
+
+	anyhow = { version = "*" }
+	crossterm = { version = "*" }
+	ratatui = { version = "*" }
+	termsize = { version = "*" }
