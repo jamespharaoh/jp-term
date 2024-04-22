@@ -2,8 +2,6 @@ use std::borrow::Cow;
 
 pub mod ansi;
 pub mod border_box;
-pub mod box_style;
-pub mod colour;
 pub mod message_box;
 pub mod ratatui;
 pub mod table;
