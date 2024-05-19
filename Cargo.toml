@@ -10,3 +10,4 @@
 	crossterm = { version = "*" }
 	ratatui = { version = "*" }
 	termsize = { version = "*" }
+	thiserror = { version = "*" }

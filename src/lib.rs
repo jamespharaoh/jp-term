@@ -1,11 +1,14 @@
 use std::borrow::Cow;
 
 pub mod ansi;
+pub mod colour;
 pub mod border_box;
 pub mod message_box;
 pub mod ratatui;
 pub mod table;
 pub mod tabs;
+
+pub use colour::Colour;
 
 pub trait Target <'dat>: Sized {
 
@@ -41,13 +44,6 @@ impl <'dat> Printable <'dat> for Cow <'dat, str> {
 	fn print (self, target: & mut impl Target <'dat>) {
 		target.push_str (self);
 	}
-}
-
-#[ derive (Clone, Copy, Default) ]
-pub struct Colour {
-	pub red: u8,
-	pub green: u8,
-	pub blue: u8,
 }
 
 #[ derive (Clone, Copy, Default) ]
