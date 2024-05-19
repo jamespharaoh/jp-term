@@ -263,7 +263,7 @@ impl <'tab, 'dat> Printable <'dat> for TableBox <'tab> {
 		for row in self.table.rows () {
 			if row.is_separator () {
 				target.push (" ");
-				target.push (border_box.middle ());
+				target.push (border_box.separator ());
 				target.newline ();
 			} else {
 				target.push (" ");

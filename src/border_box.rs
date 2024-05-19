@@ -4,9 +4,9 @@ use crate::{ Attr, Colour, Printable, Target };
 
 #[ derive (Clone, Copy) ]
 pub struct BoxStyle {
-	surround: Colour,
-	background: Colour,
-	foreground: Colour,
+	pub surround: Colour,
+	pub background: Colour,
+	pub foreground: Colour,
 }
 
 impl BoxStyle {
@@ -35,8 +35,8 @@ impl BoxStyle {
 
 #[ derive (Clone, Copy) ]
 pub struct BorderBox {
-	box_style: BoxStyle,
-	width: usize,
+	pub box_style: BoxStyle,
+	pub width: usize,
 }
 
 impl BorderBox {
@@ -53,7 +53,7 @@ impl BorderBox {
 		Border::bottom (self.box_style.surround, self.box_style.background, self.width)
 	}
 
-	pub fn middle (self) -> Border {
+	pub fn separator (self) -> Border {
 		Border::middle (self.box_style.surround, self.box_style.background, self.width)
 	}
 
