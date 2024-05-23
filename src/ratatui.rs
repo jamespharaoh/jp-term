@@ -89,14 +89,14 @@ impl From <Colour> for rat_style::Color {
 
 }
 
-pub struct TextTarget <'tar> {
+pub struct TextTargetBorrow <'tar> {
 	width: usize,
 	lines: Vec <Line <'tar>>,
 	spans: Vec <Span <'tar>>,
 	attr: Attr,
 }
 
-impl <'tar> TextTarget <'tar> {
+impl <'tar> TextTargetBorrow <'tar> {
 
 	pub fn new (width: usize) -> Self {
 		Self {
@@ -118,7 +118,7 @@ impl <'tar> TextTarget <'tar> {
 
 }
 
-impl <'tar> Target <'tar> for TextTarget <'tar> {
+impl <'tar> Target <'tar> for TextTargetBorrow <'tar> {
 
 	fn width (& self) -> usize {
 		self.width
