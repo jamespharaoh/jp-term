@@ -138,3 +138,53 @@ impl <'tar> Target <'tar> for TextTargetBorrow <'tar> {
 	}
 
 }
+
+pub struct TextTargetOwned {
+	width: usize,
+	lines: Vec <Line <'static>>,
+	spans: Vec <Span <'static>>,
+	attr: Attr,
+}
+
+impl TextTargetOwned {
+
+	pub fn new (width: usize) -> Self {
+		Self {
+			width,
+			lines: Vec::new (),
+			spans: Vec::new (),
+			attr: Attr::default (),
+		}
+	}
+
+	pub fn build <'tar> (self) -> Text <'tar> {
+		let Self { mut lines, spans, .. } = self;
+		if ! spans.is_empty () {
+			let line = Line::from (spans);
+			lines.push (line);
+		}
+		Text::from (lines)
+	}
+
+}
+
+impl <'tar> Target <'tar> for TextTargetOwned {
+
+	fn width (& self) -> usize {
+		self.width
+	}
+
+	fn push_str (& mut self, text: Cow <'tar, str>) {
+		self.spans.push (Span::styled (text.into_owned (), self.attr));
+	}
+
+	fn push_attr (& mut self, attr: Attr) {
+		self.attr = attr;
+	}
+
+	fn newline (& mut self) {
+		let line = Line::from (mem::take (& mut self.spans));
+		self.lines.push (line);
+	}
+
+}
