@@ -170,53 +170,56 @@ pub struct RowBuilder <'tab> {
 
 impl <'tab> RowBuilder <'tab> {
 
-	pub fn cell (mut self, span: u16, align: Align, width: u16, text: impl Into <String>) -> Self {
+	pub fn cell (
+		& mut self,
+		span: u16,
+		align: Align,
+		width: u16,
+		text: impl Into <String>,
+	) -> & mut Self {
 		let text = text.into ();
 		let width = cmp::max (width, text.chars ().count ().try_into ().unwrap ());
 		self.data.push (Cell { span, align, width, text });
 		self
 	}
 
-	pub fn left (self, text: impl Into <String>) -> Self {
+	pub fn left (& mut self, text: impl Into <String>) -> & mut Self {
 		self.cell (1, Align::Left, 0, text)
 	}
 
-	pub fn left_span (self, span: u16, text: impl Into <String>) -> Self {
+	pub fn left_span (& mut self, span: u16, text: impl Into <String>) -> & mut Self {
 		self.cell (span, Align::Left, 0, text)
 	}
 
-	#[ allow (dead_code) ]
-	pub fn centre (self, text: impl Into <String>) -> Self {
+	pub fn centre (& mut self, text: impl Into <String>) -> & mut Self {
 		self.cell (1, Align::Centre, 0, text)
 	}
 
-	#[ allow (dead_code) ]
-	pub fn centre_span (self, span: u16, text: impl Into <String>) -> Self {
+	pub fn centre_span (& mut self, span: u16, text: impl Into <String>) -> & mut Self {
 		self.cell (span, Align::Centre, 0, text)
 	}
 
-	pub fn right (self, text: impl Into <String>) -> Self {
+	pub fn right (& mut self, text: impl Into <String>) -> & mut Self {
 		self.cell (1, Align::Right, 0, text)
 	}
 
-	#[ allow (dead_code) ]
-	pub fn right_span (self, span: u16, text: String) -> Self {
+	pub fn right_span (& mut self, span: u16, text: String) -> & mut Self {
 		self.cell (span, Align::Right, 0, text)
 	}
 
-	pub fn space (self, width: u16) -> Self {
+	pub fn space (& mut self, width: u16) -> & mut Self {
 		self.cell (1, Align::Left, width, String::new ())
 	}
 
-	pub fn space_span (self, span: u16, width: u16) -> Self {
+	pub fn space_span (& mut self, span: u16, width: u16) -> & mut Self {
 		self.cell (span, Align::Left, width, String::new ())
 	}
 
-	pub fn empty (self) -> Self {
+	pub fn empty (& mut self) -> & mut Self {
 		self.cell (1, Align::Left, 0, String::new ())
 	}
 
-	pub fn empty_span (self, span: u16) -> Self {
+	pub fn empty_span (& mut self, span: u16) -> & mut Self {
 		self.cell (span, Align::Left, 0, String::new ())
 	}
 

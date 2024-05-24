@@ -48,26 +48,28 @@ fn read () -> anyhow::Result <Vec <Crypto>> {
 
 fn render <'tar> (target: & mut impl Target <'tar>, cryptos: & [Crypto]) {
 	let mut table = Table::builder ();
-	table.row ()
+	let mut row = table.row ();
+	row
 		.left ("Name")
 		.space (2)
 		.left ("Driver")
 		.space (2)
 		.left ("Module")
 		.space (2)
-		.left ("Type")
-		.build ();
+		.left ("Type");
+	row.build ();
 	table.separator ();
 	for crypto in cryptos {
-		table.row ()
+		let mut row = table.row ();
+		row
 			.left (& crypto.name)
 			.space (2)
 			.left (& crypto.driver)
 			.space (2)
 			.left (& crypto.module)
 			.space (2)
-			.left (& crypto.type_)
-			.build ();
+			.left (& crypto.type_);
+		row.build ();
 	}
 	let table = table.build ();
 	let box_style = BoxStyle::new (
