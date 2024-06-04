@@ -11,6 +11,7 @@ pub struct MessageBox <'dat> {
 
 impl <'dat> MessageBox <'dat> {
 
+	#[ inline ]
 	pub fn new (
 		box_style: BoxStyle,
 		text: impl Into <Cow <'dat, str>>,
@@ -21,7 +22,7 @@ impl <'dat> MessageBox <'dat> {
 		}
 	}
 
-	pub fn split (text: & str, max_width: usize) -> (Vec <(usize, usize)>, usize) {
+	fn split (text: & str, max_width: usize) -> (Vec <(usize, usize)>, usize) {
 		let mut lines = Vec::new ();
 		let text_trim = text.trim_end ();
 		let mut chars = text_trim.char_indices ();

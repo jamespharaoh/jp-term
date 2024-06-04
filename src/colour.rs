@@ -11,6 +11,7 @@ pub struct Colour {
 
 impl Colour {
 
+	#[ inline ]
 	pub const fn new (red: u8, green: u8, blue: u8) -> Self {
 		Self { red, green, blue }
 	}
@@ -110,6 +111,7 @@ impl Deref for ColoursMap {
 
 	type Target = HashMap <String, Colour>;
 
+	#[ inline ]
 	fn deref (& self) -> & HashMap <String, Colour> {
 		& self.data
 	}

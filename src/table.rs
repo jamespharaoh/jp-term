@@ -38,6 +38,7 @@ impl Table {
 			})
 	}
 
+	#[ inline ]
 	pub fn width (& self) -> u16 {
 		self.width
 	}
@@ -56,10 +57,12 @@ pub enum TableRow {
 impl TableRow {
 
 	#[ allow (dead_code) ]
+	#[ inline ]
 	pub fn is_cells (& self) -> bool {
 		matches! (self, TableRow::Cells { .. })
 	}
 
+	#[ inline ]
 	pub fn is_separator (& self) -> bool {
 		matches! (self, TableRow::Separator)
 	}
@@ -99,6 +102,7 @@ pub struct TableBuilder {
 
 impl TableBuilder {
 
+	#[ inline ]
 	pub fn row <'tab> (& 'tab mut self) -> RowBuilder <'tab> {
 		RowBuilder {
 			table_builder: self,
@@ -106,10 +110,12 @@ impl TableBuilder {
 		}
 	}
 
+	#[ inline ]
 	pub fn separator (& mut self) {
 		self.data.push (Row::Separator);
 	}
 
+	#[ inline ]
 	pub fn build (self) -> Table {
 		let widths = self.calc_widths ();
 		let width = widths.iter ().sum ();
@@ -170,6 +176,7 @@ pub struct RowBuilder <'tab> {
 
 impl <'tab> RowBuilder <'tab> {
 
+	#[ inline ]
 	pub fn cell (
 		& mut self,
 		span: u16,
@@ -177,48 +184,67 @@ impl <'tab> RowBuilder <'tab> {
 		width: u16,
 		text: impl Into <String>,
 	) -> & mut Self {
-		let text = text.into ();
+		self.cell_real (span, align, width, text.into ())
+	}
+
+	fn cell_real (
+		& mut self,
+		span: u16,
+		align: Align,
+		width: u16,
+		text: String,
+	) -> & mut Self {
 		let width = cmp::max (width, text.chars ().count ().try_into ().unwrap ());
 		self.data.push (Cell { span, align, width, text });
 		self
 	}
 
+	#[ inline ]
 	pub fn left (& mut self, text: impl Into <String>) -> & mut Self {
 		self.cell (1, Align::Left, 0, text)
 	}
 
+	#[ inline ]
 	pub fn left_span (& mut self, span: u16, text: impl Into <String>) -> & mut Self {
 		self.cell (span, Align::Left, 0, text)
 	}
 
+	#[ inline ]
 	pub fn centre (& mut self, text: impl Into <String>) -> & mut Self {
 		self.cell (1, Align::Centre, 0, text)
 	}
 
+	#[ inline ]
 	pub fn centre_span (& mut self, span: u16, text: impl Into <String>) -> & mut Self {
 		self.cell (span, Align::Centre, 0, text)
 	}
 
+	#[ inline ]
 	pub fn right (& mut self, text: impl Into <String>) -> & mut Self {
 		self.cell (1, Align::Right, 0, text)
 	}
 
+	#[ inline ]
 	pub fn right_span (& mut self, span: u16, text: String) -> & mut Self {
 		self.cell (span, Align::Right, 0, text)
 	}
 
+	#[ inline ]
 	pub fn space (& mut self, width: u16) -> & mut Self {
 		self.cell (1, Align::Left, width, String::new ())
 	}
 
+	#[ inline ]
 	pub fn space_span (& mut self, span: u16, width: u16) -> & mut Self {
 		self.cell (span, Align::Left, width, String::new ())
 	}
 
+	#[ inline ]
 	pub fn empty (& mut self) -> & mut Self {
 		self.cell (1, Align::Left, 0, String::new ())
 	}
 
+	#[ inline ]
 	pub fn empty_span (& mut self, span: u16) -> & mut Self {
 		self.cell (span, Align::Left, 0, String::new ())
 	}
@@ -246,6 +272,7 @@ pub struct TableBox <'tab> {
 
 impl <'tab> TableBox <'tab> {
 
+	#[ inline ]
 	pub fn new (box_style: BoxStyle, table: & 'tab Table) -> Self {
 		Self { box_style, table }
 	}

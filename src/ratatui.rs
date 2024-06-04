@@ -30,6 +30,7 @@ impl <Out: Write> RatTerm <Out> {
 		})
 	}
 
+	#[ inline ]
 	pub fn close (mut self) -> anyhow::Result <()> {
 		self.close_real ()
 	}
@@ -45,6 +46,7 @@ impl <Out: Write> RatTerm <Out> {
 		Ok (())
 	}
 
+	#[ inline ]
 	pub fn term_mut (& mut self) -> & mut ratatui::Terminal <rat_back::CrosstermBackend <Out>> {
 		self.term.as_mut ().unwrap ()
 	}
@@ -52,13 +54,17 @@ impl <Out: Write> RatTerm <Out> {
 }
 
 impl <Out: Write> Drop for RatTerm <Out> {
+
+	#[ inline ]
 	fn drop (& mut self) {
 		let _ = self.close_real ();
 	}
+
 }
 
 impl From <Attr> for rat_style::Style {
 
+	#[ inline ]
 	fn from (attr: Attr) -> Self {
 		let mut style = Self::default ();
 		if let Some (foreground) = attr.foreground {
@@ -83,6 +89,7 @@ impl From <Attr> for rat_style::Style {
 
 impl From <Colour> for rat_style::Color {
 
+	#[ inline ]
 	fn from (colour: Colour) -> Self {
 		Self::Rgb (colour.red, colour.green, colour.blue)
 	}
@@ -98,6 +105,7 @@ pub struct TextTargetBorrow <'tar> {
 
 impl <'tar> TextTargetBorrow <'tar> {
 
+	#[ inline ]
 	pub fn new (width: usize) -> Self {
 		Self {
 			width,
@@ -107,6 +115,7 @@ impl <'tar> TextTargetBorrow <'tar> {
 		}
 	}
 
+	#[ inline ]
 	pub fn build (self) -> Text <'tar> {
 		let Self { mut lines, spans, .. } = self;
 		if ! spans.is_empty () {
@@ -120,18 +129,22 @@ impl <'tar> TextTargetBorrow <'tar> {
 
 impl <'tar> Target <'tar> for TextTargetBorrow <'tar> {
 
+	#[ inline ]
 	fn width (& self) -> usize {
 		self.width
 	}
 
+	#[ inline ]
 	fn push_str (& mut self, text: Cow <'tar, str>) {
 		self.spans.push (Span::styled (text, self.attr));
 	}
 
+	#[ inline ]
 	fn push_attr (& mut self, attr: Attr) {
 		self.attr = attr;
 	}
 
+	#[ inline ]
 	fn newline (& mut self) {
 		let line = Line::from (mem::take (& mut self.spans));
 		self.lines.push (line);
@@ -148,6 +161,7 @@ pub struct TextTargetOwned {
 
 impl TextTargetOwned {
 
+	#[ inline ]
 	pub fn new (width: usize) -> Self {
 		Self {
 			width,
@@ -157,6 +171,7 @@ impl TextTargetOwned {
 		}
 	}
 
+	#[ inline ]
 	pub fn build <'tar> (self) -> Text <'tar> {
 		let Self { mut lines, spans, .. } = self;
 		if ! spans.is_empty () {
@@ -170,18 +185,22 @@ impl TextTargetOwned {
 
 impl <'tar> Target <'tar> for TextTargetOwned {
 
+	#[ inline ]
 	fn width (& self) -> usize {
 		self.width
 	}
 
+	#[ inline ]
 	fn push_str (& mut self, text: Cow <'tar, str>) {
 		self.spans.push (Span::styled (text.into_owned (), self.attr));
 	}
 
+	#[ inline ]
 	fn push_attr (& mut self, attr: Attr) {
 		self.attr = attr;
 	}
 
+	#[ inline ]
 	fn newline (& mut self) {
 		let line = Line::from (mem::take (& mut self.spans));
 		self.lines.push (line);

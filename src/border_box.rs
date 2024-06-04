@@ -11,20 +11,24 @@ pub struct BoxStyle {
 
 impl BoxStyle {
 
+	#[ inline ]
 	pub const fn new (surround: Colour, background: Colour, foreground: Colour) -> Self {
 		Self { surround, background, foreground }
 	}
 
+	#[ inline ]
 	pub fn with_width (self, width: usize) -> BorderBox {
 		BorderBox::new (self, width)
 	}
 
+	#[ inline ]
 	pub fn border_attr (self) -> Attr {
 		Attr::default ()
 			.background (self.surround)
 			.foreground (self.background)
 	}
 
+	#[ inline ]
 	pub fn text_attr (self) -> Attr {
 		Attr::default ()
 			.background (self.background)
@@ -41,22 +45,27 @@ pub struct BorderBox {
 
 impl BorderBox {
 
+	#[ inline ]
 	pub fn new (box_style: BoxStyle, width: usize) -> Self {
 		Self { box_style, width }
 	}
 
+	#[ inline ]
 	pub fn top (self) -> Border {
 		Border::top (self.box_style.surround, self.box_style.background, self.width)
 	}
 
+	#[ inline ]
 	pub fn bottom (self) -> Border {
 		Border::bottom (self.box_style.surround, self.box_style.background, self.width)
 	}
 
+	#[ inline ]
 	pub fn separator (self) -> Border {
 		Border::middle (self.box_style.surround, self.box_style.background, self.width)
 	}
 
+	#[ inline ]
 	pub fn text_attr (self) -> Attr {
 		self.box_style.text_attr ()
 	}
@@ -85,18 +94,22 @@ impl Border {
 	const SYM_MIDDLE: & 'static str = "─";
 	//const SYM_MIDDLE: & 'static str = "━";
 
+	#[ inline ]
 	pub fn new (type_: BorderType, background: Colour, foreground: Colour, width: usize) -> Self {
 		Self { type_, background, foreground, width }
 	}
 
+	#[ inline ]
 	pub fn top (background: Colour, foreground: Colour, width: usize) -> Self {
 		Self::new (BorderType::Top, background, foreground, width)
 	}
 
+	#[ inline ]
 	pub fn bottom (background: Colour, foreground: Colour, width: usize) -> Self {
 		Self::new (BorderType::Bottom, background, foreground, width)
 	}
 
+	#[ inline ]
 	pub fn middle (background: Colour, foreground: Colour, width: usize) -> Self {
 		Self::new (BorderType::Middle, background, foreground, width)
 	}

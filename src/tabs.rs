@@ -9,12 +9,16 @@ pub struct BoxTabs <'dat> {
 }
 
 impl <'dat> BoxTabs <'dat> {
+
+	#[ inline ]
 	pub fn new (tabs: Vec <(Cow <'dat, str>, BoxStyle)>) -> Self {
 		Self { tabs }
 	}
+
 }
 
 impl <'tar> Printable <'tar> for BoxTabs <'tar> {
+
 	fn print (self, target: & mut impl Target <'tar>) {
 
 		let border_boxes: Vec <_> = self.tabs.iter ()
@@ -46,6 +50,7 @@ impl <'tar> Printable <'tar> for BoxTabs <'tar> {
 		target.newline ();
 
 	}
+
 }
 
 pub struct SlimTabs <'dat> {
@@ -54,12 +59,16 @@ pub struct SlimTabs <'dat> {
 }
 
 impl <'dat> SlimTabs <'dat> {
+
+	#[ inline ]
 	pub fn new (background: Attr, tabs: Vec <(Cow <'dat, str>, Attr)>) -> Self {
 		Self { background, tabs }
 	}
+
 }
 
 impl <'tar> Printable <'tar> for SlimTabs <'tar> {
+
 	fn print (self, target: & mut impl Target <'tar>) {
 
 		let mut pos = 0;
@@ -83,4 +92,5 @@ impl <'tar> Printable <'tar> for SlimTabs <'tar> {
 		target.newline ();
 
 	}
+
 }

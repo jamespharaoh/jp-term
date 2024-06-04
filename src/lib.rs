@@ -18,6 +18,7 @@ pub trait Target <'dat>: Sized {
 	fn push_str (& mut self, text: Cow <'dat, str>);
 	fn newline (& mut self);
 
+	#[ inline ]
 	fn push (& mut self, value: impl Printable <'dat>) {
 		value.print (self);
 	}
@@ -29,18 +30,21 @@ pub trait Printable <'dat> {
 }
 
 impl <'dat> Printable <'dat> for & 'dat str {
+	#[ inline ]
 	fn print (self, target: & mut impl Target <'dat>) {
 		target.push_str (Cow::Borrowed (self));
 	}
 }
 
 impl <'dat> Printable <'dat> for String {
+	#[ inline ]
 	fn print (self, target: & mut impl Target <'dat>) {
 		target.push_str (Cow::Owned (self));
 	}
 }
 
 impl <'dat> Printable <'dat> for Cow <'dat, str> {
+	#[ inline ]
 	fn print (self, target: & mut impl Target <'dat>) {
 		target.push_str (self);
 	}
@@ -55,6 +59,7 @@ pub struct Attr {
 
 impl Attr {
 
+	#[ inline ]
 	pub const fn default () -> Self {
 		Self {
 			foreground: None,
@@ -63,16 +68,19 @@ impl Attr {
 		}
 	}
 
+	#[ inline ]
 	pub const fn foreground (mut self, foreground: Colour) -> Self {
 		self.foreground = Some (foreground);
 		self
 	}
 
+	#[ inline ]
 	pub const fn background (mut self, background: Colour) -> Self {
 		self.background = Some (background);
 		self
 	}
 
+	#[ inline ]
 	pub const fn bold (mut self, bold: bool) -> Self {
 		self.bold = bold;
 		self
@@ -81,6 +89,7 @@ impl Attr {
 }
 
 impl <'dat> Printable <'dat> for Attr {
+	#[ inline ]
 	fn print (self, target: & mut impl Target <'dat>) {
 		target.push_attr (self);
 	}

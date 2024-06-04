@@ -9,17 +9,22 @@ pub struct AnsiTarget <Out: Write> {
 }
 
 impl <Out: Write> AnsiTarget <Out> {
+
+	#[ inline ]
 	pub fn new (out: Out, width: usize) -> Self {
 		Self { out, width }
 	}
+
 }
 
 impl <'dat, Out: Write> Target <'dat> for AnsiTarget <Out> {
 
+	#[ inline ]
 	fn width (& self) -> usize {
 		self.width
 	}
 
+	#[ inline ]
 	fn push_attr (& mut self, attr: Attr) {
 		if let Some (Colour { red, green, blue }) = attr.foreground {
 			write! (self.out, "\x1b[38;2;{red};{green};{blue}m").unwrap ();
@@ -38,10 +43,12 @@ impl <'dat, Out: Write> Target <'dat> for AnsiTarget <Out> {
 		}
 	}
 
+	#[ inline ]
 	fn push_str (& mut self, text: Cow <'dat, str>) {
 		write! (self.out, "{text}").unwrap ();
 	}
 
+	#[ inline ]
 	fn newline (& mut self) {
 		write! (self.out, "\n").unwrap ();
 	}
