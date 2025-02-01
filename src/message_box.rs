@@ -22,45 +22,6 @@ impl <'dat> MessageBox <'dat> {
 		}
 	}
 
-	fn split (text: & str, max_width: usize) -> (Vec <(usize, usize)>, usize) {
-		let mut lines = Vec::new ();
-		let text_trim = text.trim_end ();
-		let mut chars = text_trim.char_indices ();
-		let mut line_pos = 0;
-		let mut line_chars = 0;
-		let mut prev_pos = 0;
-		let mut text_width = 0;
-		loop {
-			match chars.next () {
-				Some ((pos, '\n')) => {
-					lines.push ((line_pos, pos));
-					line_pos = pos + 1;
-					text_width = cmp::max (text_width, line_chars);
-					line_chars = 0;
-					prev_pos = pos;
-				},
-				Some ((pos, _)) => {
-					if line_chars == max_width {
-						lines.push ((line_pos, prev_pos));
-						line_pos = prev_pos;
-						text_width = cmp::max (text_width, line_chars);
-						line_chars = 0;
-					}
-					line_chars += 1;
-					prev_pos = pos;
-				},
-				None => {
-					if line_pos < text_trim.chars ().count () {
-						lines.push ((line_pos, text_trim.chars ().count ()));
-						text_width = cmp::max (text_width, line_chars);
-					}
-					break;
-				},
-			}
-		}
-		(lines, text_width)
-	}
-
 }
 
 impl <'dat> Printable <'dat> for MessageBox <'dat> {
@@ -69,7 +30,7 @@ impl <'dat> Printable <'dat> for MessageBox <'dat> {
 
 		let box_style = self.box_style;
 		let text = & * self.text;
-		let (lines, text_width) = Self::split (text, target.width ());
+		let (lines, text_width) = split (text, target.width ());
 		let border_box = box_style.with_width (text_width + 4);
 
 		target.push (" ");
@@ -98,4 +59,85 @@ impl <'dat> Printable <'dat> for MessageBox <'dat> {
 
 	}
 
+}
+
+pub struct MiniMessageBox <'dat> {
+	box_style: BoxStyle,
+	text: Cow <'dat, str>,
+	width: usize,
+}
+
+impl <'dat> MiniMessageBox <'dat> {
+
+	#[ inline ]
+	pub fn new (
+		box_style: BoxStyle,
+		text: impl Into <Cow <'dat, str>>,
+	) -> Self {
+		let text = text.into ();
+		let width = text.chars ().count () + 4;
+		Self { box_style, text, width }
+	}
+
+	#[ inline ]
+	pub fn width (& self) -> usize {
+		self.width
+	}
+
+}
+
+impl <'dat> Printable <'dat> for MiniMessageBox <'dat> {
+
+	fn print (self, target: & mut impl Target <'dat>) {
+		let box_style = self.box_style;
+		target.push (box_style.border_attr ());
+		target.push ("🬫");
+		target.push (box_style.text_attr ());
+		target.push (" ");
+		target.push (self.text);
+		target.push (" ");
+		target.push (box_style.border_attr ());
+		target.push ("🬛");
+		target.push (Attr::default ());
+	}
+
+}
+
+fn split (text: & str, max_width: usize) -> (Vec <(usize, usize)>, usize) {
+	let mut lines = Vec::new ();
+	let text_trim = text.trim_end ();
+	let mut chars = text_trim.char_indices ();
+	let mut line_pos = 0;
+	let mut line_chars = 0;
+	let mut prev_pos = 0;
+	let mut text_width = 0;
+	loop {
+		match chars.next () {
+			Some ((pos, '\n')) => {
+				lines.push ((line_pos, pos));
+				line_pos = pos + 1;
+				text_width = cmp::max (text_width, line_chars);
+				line_chars = 0;
+				prev_pos = pos;
+			},
+			Some ((pos, _)) => {
+				if line_chars == max_width {
+					lines.push ((line_pos, prev_pos));
+					line_pos = prev_pos;
+					text_width = cmp::max (text_width, line_chars);
+					line_chars = 0;
+				}
+				line_chars += 1;
+				prev_pos = pos;
+			},
+			None => {
+				if line_pos < text_trim.chars ().count () {
+					lines.push ((line_pos, text_trim.chars ().count ()));
+					text_width = cmp::max (text_width, line_chars);
+				}
+				break;
+			},
+		}
+	}
+	(lines, text_width)
 }
